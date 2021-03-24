@@ -1,0 +1,93 @@
+:root {
+    --textFontFamily: 'Montserrat', sans-serif;
+    --headerFontFamily: 'Wendy One', sans-serif;
+
+    --transform1-size: 25%;
+}
+
+* {
+    font-family: var(--headerFontFamily);
+}
+.regular-text {
+    font-family: var(--textFontFamily);
+}
+
+#zoomer1 {
+    --zoomer-size: calc(5%); /* this does not work */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: var(--zoomer-size);
+    height: var(--zoomer-size);
+    margin-top: calc(var(--zoomer-size)/-2);
+    margin-left: calc(var(--zoomer-size)/-2);
+    cursor: pointer;
+}
+
+#body-wrapper {
+    transition: transform .8s; /* Animation */
+    transition-timing-function: ease-in;
+}
+.zoomed-in-center-1 #body-wrapper {
+    transform: scale(10);
+}
+
+.zoomed-1 #body-wrapper {
+    transform: scale(2) translate(var(--transform1-size),var(--transform1-size));
+}
+.zoomed-2 #body-wrapper {
+    transform: scale(2) translate(calc(var(--transform1-size)*-1),var(--transform1-size));
+}
+.zoomed-3 #body-wrapper {
+    transform: scale(2) translate(var(--transform1-size),calc(var(--transform1-size)*-1));
+}
+.zoomed-4 #body-wrapper {
+    transform: scale(2) translate(calc(var(--transform1-size)*-1),calc(var(--transform1-size)*-1));
+}
+
+.zoomed-1 #pillar-header-1 textarea {display: flex;}
+.zoomed-2 #pillar-header-2 textarea {display: flex;}
+.zoomed-3 #pillar-header-3 textarea {display: flex;}
+.zoomed-4 #pillar-header-4 textarea {display: flex;}
+
+
+.pillar-header {
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* align horizontal */
+    align-items: center;
+    text-align: center;
+    cursor: pointer;
+}
+.pillar-header textarea {
+    flex-grow: 1;
+    margin-top: 1vh;
+    font-size: 2vh;
+    line-height: 1.1;
+    background-color: transparent;
+    border-width: 0;
+    color: white;
+    width: 100%;
+    max-width: 100%;
+    padding: 5px;
+    font-family: var(--textFontFamily);
+    transition: all .8s;
+}
+.pillar-header textarea:invalid {
+    display: none;
+}
+
+.pillar-header span {
+    font-size: 4vh;
+    color: white;
+}
+
+#zoom-out {
+    display: none;
+}
+.zoomed-in-1 #zoom-out {
+    display: block;
+}
+.zoomed-in-center-1 #zoom-out {
+    display: block;
+}
