@@ -29,7 +29,7 @@
     transition-timing-function: ease-in;
 }
 .zoomed-in-center-1 #body-wrapper {
-    transform: scale(10);
+    transform: scale(16) rotate(45deg); /* Scale more than 16 results in blink before zooming out in chrome */
 }
 
 .zoomed-1 #body-wrapper {
