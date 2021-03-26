@@ -1,0 +1,71 @@
+#zoomer1 {
+    --zoomer-size: calc(5%); /* this does not work */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: var(--zoomer-size);
+    height: var(--zoomer-size);
+    margin-top: calc(var(--zoomer-size)/-2);
+    margin-left: calc(var(--zoomer-size)/-2);
+    cursor: pointer;
+}
+
+#diagram-wrapper {
+    width: 100%;
+    height: 100%;
+    transition: transform .8s; /* Animation */
+    transition-timing-function: ease-in;
+}
+:host-context(body.zoomed-in-center-1) #diagram-wrapper {
+    transform: scale(16) rotate(45deg); /* Scale more than 16 results in blink before zooming out in chrome */
+}
+
+:host-context(body.zoomed-1) #diagram-wrapper {
+    transform: scale(2) translate(var(--transform1-size),var(--transform1-size));
+}
+:host-context(body.zoomed-2) #diagram-wrapper {
+    transform: scale(2) translate(calc(var(--transform1-size)*-1),var(--transform1-size));
+}
+:host-context(body.zoomed-3) #diagram-wrapper {
+    transform: scale(2) translate(var(--transform1-size),calc(var(--transform1-size)*-1));
+}
+:host-context(body.zoomed-4) #diagram-wrapper {
+    transform: scale(2) translate(calc(var(--transform1-size)*-1),calc(var(--transform1-size)*-1));
+}
+
+:host-context(body.zoomed-1) #pillar-header-1 textarea {display: flex;}
+:host-context(body.zoomed-2) #pillar-header-2 textarea {display: flex;}
+:host-context(body.zoomed-3) #pillar-header-3 textarea {display: flex;}
+:host-context(body.zoomed-4) #pillar-header-4 textarea {display: flex;}
+
+
+.pillar-header {
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* align horizontal */
+    align-items: center;
+    text-align: center;
+    cursor: pointer;
+}
+.pillar-header textarea {
+    flex-grow: 1;
+    margin-top: 1vh;
+    font-size: 2vh;
+    line-height: 1.1;
+    background-color: transparent;
+    border-width: 0;
+    color: white;
+    width: 100%;
+    max-width: 100%;
+    padding: 5px;
+    font-family: var(--textFontFamily);
+    transition: all .8s;
+}
+.pillar-header textarea:invalid {
+    display: none;
+}
+
+.pillar-header span {
+    font-size: 4vh;
+    color: white;
+}
