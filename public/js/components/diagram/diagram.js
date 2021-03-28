@@ -1,5 +1,6 @@
 import {createSvgElement, setElementAttributes} from "../../utils/dom.js";
 import {pillars, paletteDark1} from "../../model/pillars.js";
+import {intersections} from "../../model/intersections.js";
 
 export const renderDiagram = () => {
     fetch("./js/components/diagram/diagram.html")
@@ -29,6 +30,32 @@ function define(html) {
         width: "30%",
         height: "30%"
     });
+
+
+
+    // INTERSECTION POSITIONS
+    //   1
+    // -----
+    // 2 | 3
+    // -----
+    //   4
+    const isVertical = p => p === 1 || p === 4;
+    const isFirstInGroup = p => p === 1 || p === 2;
+    const intersectionTextBlocks = (position) => {
+        const isVerticalPosition = isVertical(position);
+        const dimensionInGroup = isFirstInGroup(position) ? 15 : 55;
+
+        const left = `${isVerticalPosition ? 45 : dimensionInGroup}%`;
+        const top = `${!isVerticalPosition ? 45 : dimensionInGroup}%`;
+        const width = `${isVerticalPosition ? 10 : 30}%`;
+        const height = `${isVerticalPosition ? 30 : 10}%`;
+        return {
+            left,
+            top,
+            width,
+            height,
+        }
+    };
 
 
     // POSITIONS
@@ -69,6 +96,17 @@ function define(html) {
                 setElementAttributes(ellipsis, attrs)
                 return ellipsis;
             }
+
+            const createAndAppendElements = (p, parentElement) => {
+                const span = document.createElement("span");
+                span.innerText = p.title;
+                parentElement.appendChild(span);
+
+                const input = document.createElement("textarea");
+                setElementAttributes(input, {required: true})
+                parentElement.appendChild(input);
+                return input;
+            };
 
             pillars.forEach(p => {
                 const attrs = {
@@ -118,18 +156,33 @@ function define(html) {
                     header.style.setProperty(key, value);
                 }
                 setElementAttributes(header, {id: `pillar-header-${p.position}`});
-                const span = document.createElement("span");
-                span.innerText = p.title;
-                header.appendChild(span);
-                const input = document.createElement("textarea");
-                setElementAttributes(input, {required: true})
-                header.appendChild(input);
+
+                const input = createAndAppendElements(p, header);
                 diagramTexts.appendChild(header);
+
 
                 header.addEventListener("click", () => {
                     document.body.classList.add(`zoomed-${p.position}`);
                     document.body.classList.add(`zoomed-in-1`);
                     input.focus();
+                })
+            });
+
+            intersections.forEach(p => {
+                const intersection = document.createElement("div");
+                intersection.classList.add("pillar-intersection")
+                const intersectionAttrs = {...intersectionTextBlocks(p.position), position: "absolute"};
+                for (const [key, value] of Object.entries(intersectionAttrs)) {
+                    intersection.style.setProperty(key, value);
+                }
+                setElementAttributes(intersection, {id: `pillar-intersection-${p.position}`});
+                const intersectionInput = createAndAppendElements(p, intersection);
+
+                diagramTexts.appendChild(intersection);
+                intersection.addEventListener("click", () => {
+                    document.body.classList.add(`zoomed-inter-${p.position}`);
+                    document.body.classList.add(`zoomed-in-1`);
+                    intersectionInput.focus();
                 })
             });
 
