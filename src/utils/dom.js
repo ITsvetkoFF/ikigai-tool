@@ -7,3 +7,8 @@ export const setElementAttributes = (element, attrs) => {
         element.setAttribute(key, value);
     }
 }
+export const setElementStyles = (element, attrs) => {
+    for (const [key, value] of Object.entries(attrs)) {
+        element.style.setProperty(key, value);
+    }
+}
