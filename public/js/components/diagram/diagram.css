@@ -57,6 +57,37 @@
 :host-context(body.zoomed-inter-4) #pillar-intersection-4 textarea {display: flex;}
 
 
+/* Hiding pillars and their texts  that are not in use in currently zoomed-in intersection and other intersections */
+:host-context(body.hide-pillar-1) #pillar-1,
+:host-context(body.hide-pillar-1) #pillar-header-1 {
+    display: none;
+}
+:host-context(body.show-intersection-1) .pillar-intersection:not(#pillar-intersection-1) {
+    display: none;
+}
+:host-context(body.hide-pillar-2) #pillar-2,
+:host-context(body.hide-pillar-2) #pillar-header-2 {
+    display: none;
+}
+:host-context(body.show-intersection-2) .pillar-intersection:not(#pillar-intersection-2) {
+    display: none;
+}
+:host-context(body.hide-pillar-3) #pillar-3,
+:host-context(body.hide-pillar-3) #pillar-header-3 {
+    display: none;
+}
+:host-context(body.show-intersection-3) .pillar-intersection:not(#pillar-intersection-3) {
+    display: none;
+}
+:host-context(body.hide-pillar-4) #pillar-4,
+:host-context(body.hide-pillar-4) #pillar-header-4 {
+    display: none;
+}
+:host-context(body.show-intersection-4) .pillar-intersection:not(#pillar-intersection-4) {
+    display: none;
+}
+
+
 .pillar-header, .pillar-intersection {
     display: flex;
     flex-direction: column;
@@ -79,6 +110,16 @@
     font-family: var(--textFontFamily);
     transition: all .8s;
 }
+
+.pillar-intersection.filled span {
+    color: transparent;
+    /*Temporary copied svg, cannot insert it from another folder yet*/
+    background-image: url('./checkmark.svg');
+    background-repeat: no-repeat;
+}
+
+/* Invalid pseudo-class allows us to hide empty textarea element in the zoomed-out state */
+
 .pillar-header textarea:invalid, .pillar-intersection textarea:invalid {
     display: none;
 }
