@@ -2,7 +2,7 @@ import {createSvgElement, setElementAttributes} from "../../utils/dom.js";
 import {pillars, paletteDark1} from "../../model/pillars.js";
 
 export const renderDiagram = () => {
-    fetch("./src/components/diagram/diagram.html")
+    fetch("./js/components/diagram/diagram.html")
         .then(stream => stream.text())
         .then(text => define(text));
 }
