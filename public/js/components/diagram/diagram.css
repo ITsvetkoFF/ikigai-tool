@@ -33,13 +33,62 @@
     transform: scale(2) translate(calc(var(--transform1-size)*-1),calc(var(--transform1-size)*-1));
 }
 
+:host-context(body.zoomed-inter-1) #diagram-wrapper {
+    transform: scale(2) translate(0, var(--transform1-size));
+}
+:host-context(body.zoomed-inter-2) #diagram-wrapper {
+    transform: scale(2) translate(var(--transform1-size), 0);
+}
+:host-context(body.zoomed-inter-3) #diagram-wrapper {
+    transform: scale(2) translate(calc(var(--transform1-size)*-1), 0);
+}
+:host-context(body.zoomed-inter-4) #diagram-wrapper {
+    transform: scale(2) translate(0, calc(var(--transform1-size)*-1));
+}
+
 :host-context(body.zoomed-1) #pillar-header-1 textarea {display: flex;}
 :host-context(body.zoomed-2) #pillar-header-2 textarea {display: flex;}
 :host-context(body.zoomed-3) #pillar-header-3 textarea {display: flex;}
 :host-context(body.zoomed-4) #pillar-header-4 textarea {display: flex;}
 
+:host-context(body.zoomed-inter-1) #pillar-intersection-1 textarea {display: flex;}
+:host-context(body.zoomed-inter-2) #pillar-intersection-2 textarea {display: flex;}
+:host-context(body.zoomed-inter-3) #pillar-intersection-3 textarea {display: flex;}
+:host-context(body.zoomed-inter-4) #pillar-intersection-4 textarea {display: flex;}
 
-.pillar-header {
+
+/* Hiding pillars and their texts  that are not in use in currently zoomed-in intersection and other intersections */
+:host-context(body.hide-pillar-1) #pillar-1,
+:host-context(body.hide-pillar-1) #pillar-header-1 {
+    display: none;
+}
+:host-context(body.show-intersection-1) .pillar-intersection:not(#pillar-intersection-1) {
+    display: none;
+}
+:host-context(body.hide-pillar-2) #pillar-2,
+:host-context(body.hide-pillar-2) #pillar-header-2 {
+    display: none;
+}
+:host-context(body.show-intersection-2) .pillar-intersection:not(#pillar-intersection-2) {
+    display: none;
+}
+:host-context(body.hide-pillar-3) #pillar-3,
+:host-context(body.hide-pillar-3) #pillar-header-3 {
+    display: none;
+}
+:host-context(body.show-intersection-3) .pillar-intersection:not(#pillar-intersection-3) {
+    display: none;
+}
+:host-context(body.hide-pillar-4) #pillar-4,
+:host-context(body.hide-pillar-4) #pillar-header-4 {
+    display: none;
+}
+:host-context(body.show-intersection-4) .pillar-intersection:not(#pillar-intersection-4) {
+    display: none;
+}
+
+
+.pillar-header, .pillar-intersection {
     display: flex;
     flex-direction: column;
     justify-content: center; /* align horizontal */
@@ -47,7 +96,7 @@
     text-align: center;
     cursor: pointer;
 }
-.pillar-header textarea {
+.pillar-header textarea, .pillar-intersection textarea {
     flex-grow: 1;
     margin-top: 1vh;
     font-size: 2vh;
@@ -61,11 +110,21 @@
     font-family: var(--textFontFamily);
     transition: all .8s;
 }
-.pillar-header textarea:invalid {
+
+.pillar-intersection.filled span {
+    color: transparent;
+    /*Temporary copied svg, cannot insert it from another folder yet*/
+    background-image: url('./checkmark.svg');
+    background-repeat: no-repeat;
+}
+
+/* Invalid pseudo-class allows us to hide empty textarea element in the zoomed-out state */
+
+.pillar-header textarea:invalid, .pillar-intersection textarea:invalid {
     display: none;
 }
 
-.pillar-header span {
+.pillar-header span, .pillar-intersection span {
     font-size: 4vh;
     color: white;
 }

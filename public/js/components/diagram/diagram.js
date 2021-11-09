@@ -1,5 +1,6 @@
-import {createSvgElement, setElementAttributes} from "../../utils/dom.js";
+import {createSvgElement, setElementAttributes, setElementStyles} from "../../utils/dom.js";
 import {pillars, paletteDark1} from "../../model/pillars.js";
+import {intersections, intersectionToPillarRelation} from "../../model/intersections.js";
 
 export const renderDiagram = () => {
     fetch("./js/components/diagram/diagram.html")
@@ -29,6 +30,32 @@ function define(html) {
         width: "30%",
         height: "30%"
     });
+
+
+
+    // INTERSECTION POSITIONS
+    //   1
+    // -----
+    // 2 | 3
+    // -----
+    //   4
+    const isVertical = p => p === 1 || p === 4;
+    const isFirstInGroup = p => p === 1 || p === 2;
+    const intersectionTextBlocks = (position) => {
+        const isVerticalPosition = isVertical(position);
+        const dimensionInGroup = isFirstInGroup(position) ? 15 : 55;
+
+        const left = `${isVerticalPosition ? 45 : dimensionInGroup}%`;
+        const top = `${!isVerticalPosition ? 45 : dimensionInGroup}%`;
+        const width = `${isVerticalPosition ? 10 : 30}%`;
+        const height = `${isVerticalPosition ? 30 : 10}%`;
+        return {
+            left,
+            top,
+            width,
+            height,
+        }
+    };
 
 
     // POSITIONS
@@ -70,10 +97,31 @@ function define(html) {
                 return ellipsis;
             }
 
+            const getCreatedSpan = (p) => {
+                const span = document.createElement("span");
+                span.innerText = p.title;
+                return span;
+            }
+
+            const getCreatedTextArea = () => {
+                const input = document.createElement("textarea");
+                // Required allows us to hide textarea element in the zoomed-out state via css
+                // and simultaneously does not prevent us to show it when we are zoomed in
+                setElementAttributes(input, {required: true})
+                return input;
+            }
+
+            const appendElements = (parentElement, elementsArray) => {
+                elementsArray.forEach(element => {
+                    parentElement.appendChild(element);
+                });
+            };
+
             pillars.forEach(p => {
                 const attrs = {
                     ...mapPositionToEllipsisParams(p.position),
                     ...mapColorIndexToEllipsisParams(p.colorIndex),
+                    id: `pillar-${p.position}`
                     // tabindex: p.tabindex
                 };
                 const ellipsis = createPillarEllipse(attrs);
@@ -114,22 +162,48 @@ function define(html) {
                 const header = document.createElement("div");
                 header.classList.add("pillar-header")
                 const attrs = {...mainEllipsisTextBlocks(p.position), position: "absolute"};
-                for (const [key, value] of Object.entries(attrs)) {
-                    header.style.setProperty(key, value);
-                }
+                setElementStyles(header, attrs);
                 setElementAttributes(header, {id: `pillar-header-${p.position}`});
-                const span = document.createElement("span");
-                span.innerText = p.title;
-                header.appendChild(span);
-                const input = document.createElement("textarea");
-                setElementAttributes(input, {required: true})
-                header.appendChild(input);
+
+                const input = getCreatedTextArea();
+                appendElements(header, [getCreatedSpan(p), input]);
                 diagramTexts.appendChild(header);
+
 
                 header.addEventListener("click", () => {
                     document.body.classList.add(`zoomed-${p.position}`);
                     document.body.classList.add(`zoomed-in-1`);
                     input.focus();
+                })
+            });
+
+            intersections.forEach(p => {
+                const intersection = document.createElement("div");
+                intersection.classList.add("pillar-intersection")
+                const intersectionAttrs = {...intersectionTextBlocks(p.position), position: "absolute"};
+                setElementStyles(intersection, intersectionAttrs);
+                setElementAttributes(intersection, {id: `pillar-intersection-${p.position}`});
+
+                const intersectionInput = getCreatedTextArea();
+                appendElements(intersection, [getCreatedSpan(p), intersectionInput]);
+
+                diagramTexts.appendChild(intersection);
+                intersectionInput.addEventListener('focusout', (event) => {
+                    console.log('focused-put with ', event.path[0].value);
+                    if(event.path[0].value) {
+                        intersection.classList.add("filled");
+                    } else {
+                        intersection.classList.remove("filled");
+                    }
+                })
+                intersection.addEventListener("click", () => {
+                    document.body.classList.add(`zoomed-inter-${p.position}`);
+                    document.body.classList.add(`zoomed-in-1`);
+                    intersectionToPillarRelation[p.position].forEach((position) => {
+                        document.body.classList.add(`hide-pillar-${position}`);
+                    });
+                    document.body.classList.add(`show-intersection-${p.position}`);
+                    intersectionInput.focus();
                 })
             });
 
