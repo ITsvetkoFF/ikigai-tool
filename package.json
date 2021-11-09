@@ -18,13 +18,25 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "knex": "knex --knexfile knexfile.ts",
+    "migrate": "npm run knex migrate:latest",
+    "migrate:make": "npm run knex migrate:make -- -x ts",
+    "seed": "npm run knex seed:run",
+    "seed:make": "npm run knex seed:make -- -x ts",
+    "run:pg-docker": "docker run -it --rm --name pg-docker -e POSTGRES_PASSWORD=docker -p 5432:5432 postgres:10",
+    "stop:pg-docker": "docker kill pg-docker"
   },
   "dependencies": {
     "@nestjs/common": "^8.0.0",
     "@nestjs/core": "^8.0.0",
     "@nestjs/platform-express": "^8.0.0",
     "@nestjs/serve-static": "^2.2.2",
+    "@types/dotenv": "^8.2.0",
+    "dotenv": "^10.0.0",
+    "knex": "^0.95.14",
+    "objection": "^2.2.18",
+    "pg": "^8.7.1",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^7.2.0"

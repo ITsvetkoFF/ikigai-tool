@@ -1,5 +1,7 @@
 export const init = () => {
 
+    // TODO: both event listeners should be closer to diagram
+
     const zoomout = document.getElementById("zoom-out");
     zoomout.addEventListener("click", () => {
         document.body.className = "";
