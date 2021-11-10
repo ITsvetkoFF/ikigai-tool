@@ -15,4 +15,8 @@ export class UserService {
         .insert(props)
         .returning('*');
   }
+
+  findOne(id: string) {
+    return this.modelClass.query().findById(id)
+  }
 }
