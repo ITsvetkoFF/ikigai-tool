@@ -18,17 +18,17 @@ function define(html, initialPillars) {
     const positionIsLeft = p => p === 1 || p === 3;
     const positionIsTop = p => p === 1 || p === 2;
     const mapPositionToEllipsisParams = (position, CENTER_OFFSET_PERCENT = 30, RADIUS_PERCENT = 29) => ({
-        cx: `${positionIsLeft(position) ? CENTER_OFFSET_PERCENT : 100 - CENTER_OFFSET_PERCENT}%`,
-        cy: `${positionIsTop(position) ? CENTER_OFFSET_PERCENT : 100 - CENTER_OFFSET_PERCENT}%`,
-        rx: `${RADIUS_PERCENT}%`,
-        ry: `${RADIUS_PERCENT}%`,
+        cx: `${positionIsLeft(position) ? CENTER_OFFSET_PERCENT : 100 - CENTER_OFFSET_PERCENT}vmin`,
+        cy: `${positionIsTop(position) ? CENTER_OFFSET_PERCENT : 100 - CENTER_OFFSET_PERCENT}vmin`,
+        rx: `${RADIUS_PERCENT}vmin`,
+        ry: `${RADIUS_PERCENT}vmin`,
     });
 
     const mainEllipsisTextBlocks = (position) => ({
-        left: `${positionIsLeft(position) ? 10 : 60}%`,
-        top: `${positionIsTop(position) ? 10 : 60}%`,
-        width: "30%",
-        height: "30%"
+        left: `${positionIsLeft(position) ? 10 : 60}vmin`,
+        top: `${positionIsTop(position) ? 10 : 60}vmin`,
+        width: "30vmin",
+        height: "30vmin"
     });
 
     const mapColorIndexToEllipsisParams = (colorIndex, palette = paletteDark1) => ({
