@@ -2,6 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { UserModel } from "../database/models/user.model";
 import { ModelClass, raw } from 'objection';
 import { PillarContents, UserLogEvent } from "./types";
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class UserService {
@@ -13,7 +14,10 @@ export class UserService {
   create(props: Partial<UserModel>) {
     return this.modelClass
         .query()
-        .insert(props)
+        .insert({
+          id: uuidv4(),
+          ...props}
+        )
         .returning('*');
   }
 
