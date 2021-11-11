@@ -5,7 +5,10 @@ import { knexSnakeCaseMappers } from 'objection';
 
 module.exports = {
   client: 'pg',
-  connection: process.env.DATABASE_URL,
+  connection: {
+    connectionString: process.env.DATABASE_URL,
+    ssl: { rejectUnauthorized: false }
+  },
   migrations: {
     directory: './src/database/migrations',
     stub: './src/database/migration.stub',
