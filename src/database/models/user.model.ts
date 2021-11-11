@@ -1,20 +1,22 @@
 import { BaseModel } from './base.model';
-import { UserLogEvent } from "../../user/types";
+import { Pillar, PillarContents, UserLogEvent } from "../../user/types";
 
 export class UserModel extends BaseModel {
   static tableName = 'users';
 
   name: string;
 
-  log: UserLogEvent[]
+  log: UserLogEvent[];
+
+  pillars: Partial<PillarContents>;
 
   static get jsonSchema() {
     return {
       type: 'object',
-      required: ['log'],
 
       properties: {
         id: { type: 'string' },
+        name: { type: 'string' },
         // Properties defined as objects or arrays are
         // automatically converted to JSON strings when
         // writing to database and back to objects and arrays
@@ -29,7 +31,18 @@ export class UserModel extends BaseModel {
             actionData: { type: 'string'},
             timestamp: { type: 'number' }
           },
-          required: ['pillar', 'action', 'timestamp']
+          required: ['pillar', 'action', 'timestamp'], // TODO: understand why this does not work
+          additionalProperties: false
+        },
+        pillars: {
+          type: 'object',
+          properties: {
+            [Pillar.LOVE]: {type: 'string'},
+            [Pillar.PAID_FOR]: {type: 'string'},
+            [Pillar.GOOD_AT]: {type: 'string'},
+            [Pillar.WORLD_NEEDS]: {type: 'string'},
+          },
+          additionalProperties: false // TODO: understand why this does not work
         }
       }
     };

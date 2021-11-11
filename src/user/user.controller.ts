@@ -1,6 +1,6 @@
-import { Body, Controller, Get, Param, ParseUUIDPipe, Post, Put } from '@nestjs/common';
+import { Body, Controller, Get, Param, ParseUUIDPipe, Post, Patch } from '@nestjs/common';
 import { UserService } from './user.service';
-import { UserLogEvent } from "./types";
+import { UserModel } from "../database/models/user.model";
 
 @Controller(('users'))
 export class UserController {
@@ -8,7 +8,7 @@ export class UserController {
 
   @Post('')
   async postUser() {
-    const user = await this.userService.create({});
+    const user = await this.userService.create({log: [], pillars: {}});
     return user.id;
   }
 
@@ -18,9 +18,15 @@ export class UserController {
     return user;
   }
 
-  @Put(':id')
-  async putOne(@Param('id', new ParseUUIDPipe()) id: string, @Body() body: UserLogEvent[]) {
-    const user = await this.userService.addEvents(id, body);
+  @Patch(':id')
+  async putOne(@Param('id', new ParseUUIDPipe()) id: string, @Body() body: Partial<UserModel>) {
+    let user;
+    if (body.log)  {
+      user = await this.userService.addEvents(id, body.log);
+    }
+    if (body.pillars)  {
+      user = await this.userService.changePillars(id, body.pillars);
+    }
     return user;
   }
 }

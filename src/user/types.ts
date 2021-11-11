@@ -1,4 +1,4 @@
-export enum pillar {
+export enum Pillar {
   LOVE = "LOVE",
   GOOD_AT = "GOOD_AT",
   WORLD_NEEDS = "WORLD_NEEDS",
@@ -6,8 +6,10 @@ export enum pillar {
 }
 
 export interface UserLogEvent {
-  pillar: pillar;
+  pillar: Pillar;
   action: 'type' | 'del' | 'backspace' | 'alter';
   actionData?: string;
   timestamp: number;
 }
+
+export type PillarContents = Record<keyof typeof Pillar, string>
